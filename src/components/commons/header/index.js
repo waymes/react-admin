@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 
 import Button from '../button';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   title: {
     marginRight: 'auto',
   },
@@ -27,10 +27,12 @@ const Header = () => {
           variant="text"
           to="/login"
           component={Link}
-        >Login</Button>
+        >
+          Login
+        </Button>
       </Toolbar>
     </AppBar>
   );
-}
+};
 
 export default Header;

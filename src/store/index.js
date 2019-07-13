@@ -9,7 +9,7 @@ export const history = createBrowserHistory();
 const rootReducer = createRootReducer(history);
 
 const composeEnhancers = composeWithDevTools({
-  name: 'PMS'
+  name: 'PMS',
 });
 
 const middleware = [routerMiddleware(history)];

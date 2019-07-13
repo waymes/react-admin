@@ -12,13 +12,13 @@ const useStyles = makeStyles(theme => ({
     width: '100%',
     maxWidth: '400px',
     boxSizing: 'border-box',
-    margin: `${theme.spacing(7)}px auto`
+    margin: `${theme.spacing(7)}px auto`,
   },
   submit: {
     display: 'block',
     marginLeft: 'auto',
-    marginTop: theme.spacing(3)
-  }
+    marginTop: theme.spacing(3),
+  },
 }));
 
 const Login = () => {
@@ -36,6 +36,6 @@ const Login = () => {
       </form>
     </Paper>
   );
-}
+};
 
 export default Login;

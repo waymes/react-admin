@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import MaterialButton from '@material-ui/core/Button';
 
 const Button = ({ children, ...rest }) => (
@@ -6,5 +7,9 @@ const Button = ({ children, ...rest }) => (
     {children}
   </MaterialButton>
 );
+
+Button.propTypes = {
+  children: PropTypes.node.isRequired,
+};
 
 export default Button;
