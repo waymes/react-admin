@@ -1,10 +1,13 @@
 import React from 'react';
+import { Form } from 'react-final-form';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
-import InputField from '../../commons/text-field';
-import Button from '../../commons/button';
+import { TextField, Button } from '../../commons';
+import notAuthedGuard from '../../layouts/not-authed-guard';
+
+import { login } from '../../../store/actions/app';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -26,16 +29,21 @@ const Login = () => {
 
   return (
     <Paper className={classes.root}>
-      <form>
-        <Typography variant="h5" component="h3">
-          Login to Admin
-        </Typography>
-        <InputField label="Email" type="email" required />
-        <InputField label="Password" type="password" required />
-        <Button color="primary" className={classes.submit} type="submit">Login</Button>
-      </form>
+      <Form
+        onSubmit={login}
+        render={({ handleSubmit }) => (
+          <form onSubmit={handleSubmit}>
+            <Typography variant="h5" component="h3">
+              Login to Admin
+            </Typography>
+            <TextField name="email" label="Email" type="email" required />
+            <TextField name="password" label="Password" type="password" required />
+            <Button color="primary" className={classes.submit} type="submit">Login</Button>
+          </form>
+        )}
+      />
     </Paper>
   );
 };
 
-export default Login;
+export default notAuthedGuard(Login);

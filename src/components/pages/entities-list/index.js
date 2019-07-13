@@ -9,6 +9,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
 import { Button } from '../../commons';
+import authGuard from '../../layouts/auth-guard';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -69,4 +70,4 @@ const EntitiesList = () => {
   );
 };
 
-export default EntitiesList;
+export default authGuard(EntitiesList);

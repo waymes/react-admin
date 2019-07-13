@@ -1,10 +1,11 @@
 import React from 'react';
+import { Form } from 'react-final-form';
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
-import InputField from '../../commons/text-field';
-import Button from '../../commons/button';
+import { TextField, Button } from '../../commons';
+import authGuard from '../../layouts/auth-guard';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -24,18 +25,23 @@ const Entity = () => {
 
   return (
     <Paper className={classes.root}>
-      <form>
-        <Typography variant="h5" component="h3">
-          Edit User 1
-        </Typography>
-        <InputField label="First Name" />
-        <InputField label="Last Name" />
-        <InputField label="Email" type="email" />
-        <InputField label="Phone" />
-        <Button color="primary" className={classes.submit} type="submit">Save</Button>
-      </form>
+      <Form
+        onSubmit={() => {}}
+        render={({ handleSubmit }) => (
+          <form onSubmit={handleSubmit}>
+            <Typography variant="h5" component="h3">
+              Edit User 1
+            </Typography>
+            <TextField name="firstName" label="First Name" />
+            <TextField name="lastName" label="Last Name" />
+            <TextField name="email" label="Email" type="email" />
+            <TextField name="phone" label="Phone" />
+            <Button color="primary" className={classes.submit} type="submit">Save</Button>
+          </form>
+        )}
+      />
     </Paper>
   );
 };
 
-export default Entity;
+export default authGuard(Entity);
