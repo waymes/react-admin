@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Header from '../../commons/header';
+import { Header, Drawer } from '../../commons';
 
 const GeneralLayout = ({ children }) => (
   <div>
     <Header />
+    <Drawer />
     <div>
       {children}
     </div>
