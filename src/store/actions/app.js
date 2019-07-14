@@ -12,16 +12,15 @@ const menuList = [
 ];
 
 export const login = async ({ email, password }) => {
-  dispatch({ type: constants.LOGIN });
   try {
     await new Promise((resolve) => {
-      setTimeout(resolve, 1000);
+      setTimeout(resolve, 5000);
     });
     const token = 'ToKeN';
     localStorage.setItem('token', token);
     dispatch({ type: constants.LOGIN_SUCCESS, token, menuList });
   } catch (error) {
-    dispatch({ type: constants.LOGIN_ERROR, error });
+    // dispatch({ type: constants.LOGIN_ERROR, error });
   }
 };
 

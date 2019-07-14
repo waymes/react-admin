@@ -11,7 +11,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
-import { Button } from '../../commons';
+import { Button, Loading } from '../../commons';
 import authGuard from '../../layouts/auth-guard';
 
 import { fetchEntityList } from '../../../store/actions/entityList';
@@ -42,7 +42,7 @@ class EntitiesList extends Component {
       list, allowedFields, isLoading, classes,
     } = this.props;
 
-    if (isLoading) return 'Loading...';
+    if (isLoading) return <Loading />;
 
     return (
       <Paper className={classes.root}>
@@ -77,8 +77,12 @@ EntitiesList.propTypes = {
   list: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   allowedFields: PropTypes.shape({}).isRequired,
   isLoading: PropTypes.bool.isRequired,
-  classes: PropTypes.shape({}).isRequired,
-  match: PropTypes.shape({}).isRequired,
+  classes: PropTypes.shape().isRequired,
+  match: PropTypes.shape({
+    params: PropTypes.shape({
+      entities: PropTypes.string,
+    }),
+  }).isRequired,
 };
 
 const mapStateToProps = state => ({

@@ -2,7 +2,6 @@ import * as constants from '../constants/app';
 
 const initialState = {
   token: null,
-  isLoginLoading: false,
   isDrawerOpen: false,
   isAuthTouchComplete: false,
   menuList: [],
@@ -12,17 +11,12 @@ export default (state = initialState, action) => {
   switch (action.type) {
     case constants.TOGGLE_DRAWER:
       return { ...state, isDrawerOpen: !state.isDrawerOpen };
-    case constants.LOGIN:
-      return { ...state, isLoginLoading: true };
     case constants.LOGIN_SUCCESS:
       return {
         ...state,
-        isLoginLoading: false,
         token: action.token,
         menuList: action.menuList,
       };
-    case constants.LOGIN_ERROR:
-      return { ...state, isLoginLoading: false };
     case constants.LOGOUT:
       return { ...state, token: null };
     case constants.AUTH_TOUCH_SUCCESS:

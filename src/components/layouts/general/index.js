@@ -1,8 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
-import { Header, Drawer } from '../../commons';
+import { Header, Drawer, Loading } from '../../commons';
 
 import { authTouch } from '../../../store/actions/app';
 
@@ -16,7 +16,7 @@ class GeneralLayout extends React.Component {
       isLoggedIn, children, isAuthTouchComplete, menuList,
     } = this.props;
 
-    if (!isAuthTouchComplete) return 'Loading...';
+    if (!isAuthTouchComplete) return <Loading fixed />;
     return (
       <div>
         <Header isLoggedIn={isLoggedIn} />

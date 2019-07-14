@@ -1,8 +1,6 @@
 export const TOGGLE_DRAWER = 'APP__TOGGLE_DRAWER';
 
-export const LOGIN = 'APP__LOGIN';
 export const LOGIN_SUCCESS = 'APP__LOGIN_SUCCESS';
-export const LOGIN_ERROR = 'APP__LOGIN_ERROR';
 export const LOGOUT = 'APP__LOGOUT';
 export const AUTH_TOUCH_SUCCESS = 'APP__AUTH_TOUCH_SUCCESS';
 export const AUTH_TOUCH_ERROR = 'APP__AUTH_TOUCH_ERROR';
