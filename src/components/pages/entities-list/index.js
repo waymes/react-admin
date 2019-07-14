@@ -52,13 +52,15 @@ class EntitiesList extends Component {
 
     if (isLoading) return <Loading />;
 
+    if (list.length === 0) return 'Empty for now';
+
     return (
       <Paper className={classes.root}>
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
               {Object.values(allowedFields).map(label => (
-                <TableCell>{label}</TableCell>
+                <TableCell key={label}>{label}</TableCell>
               ))}
               <TableCell align="right">Actions</TableCell>
             </TableRow>

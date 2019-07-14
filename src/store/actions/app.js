@@ -10,7 +10,7 @@ export const toggleDrawer = () => {
 
 const menuList = [
   { label: 'Dashboard', href: '/' },
-  { label: 'Users', href: '/users' },
+  { label: 'Subscribers', href: '/subscribers' },
   { label: 'Trips', href: '/trips' },
 ];
 
