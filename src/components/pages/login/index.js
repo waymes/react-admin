@@ -32,13 +32,18 @@ const Login = () => {
     <Paper className={classes.root}>
       <Form
         onSubmit={login}
-        render={({ handleSubmit, submitting }) => (
+        render={({ handleSubmit, submitting, submitError }) => (
           <form onSubmit={handleSubmit}>
             <Typography variant="h5" component="h3">
               Login to Admin
             </Typography>
             <TextField name="email" label="Email" type="email" required disabled={submitting} />
             <TextField name="password" label="Password" type="password" required disabled={submitting} />
+            {submitError && (
+              <Typography variant="subtitle2" component="span" color="error">
+                {submitError}
+              </Typography>
+            )}
             <Button color="primary" className={classes.submit} type="submit" disabled={submitting}>Login</Button>
             {submitting && <Loading />}
           </form>

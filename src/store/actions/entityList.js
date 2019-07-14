@@ -10,14 +10,15 @@ export const fetchEntityList = async () => {
       setTimeout(resolve, 1000);
     });
     const list = [
-      { id: 1, firstName: 'Mike', lastName: 'Jordan' },
-      { id: 2, firstName: 'Mike', lastName: 'Jordan' },
-      { id: 3, firstName: 'Mike', lastName: 'Jordan' },
-      { id: 4, firstName: 'Mike', lastName: 'Jordan' },
+      { id: 1, firstName: 'Mike', lastName: 'Jordan', email: 'mike@gmail.com' },
+      { id: 2, firstName: 'Susan', lastName: 'Green', email: 'susan@gmail.com' },
+      { id: 3, firstName: 'John', lastName: 'Black', email: 'john@gmail.com' },
+      { id: 4, firstName: 'Trevor', lastName: 'Fillips', email: 'trevor@gmail.com' },
     ];
     const allowedFields = {
       firstName: 'First Name',
       lastName: 'Last Name',
+      email: 'Email',
     };
     dispatch({ type: constants.FETCH_ENTITY_LIST_SUCCESS, list, allowedFields });
   } catch (error) {

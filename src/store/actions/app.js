@@ -1,5 +1,8 @@
+import { FORM_ERROR } from 'final-form';
+
 import * as constants from '../constants/app';
 import { dispatch } from '..';
+import request from '../../helpers/request';
 
 export const toggleDrawer = () => {
   dispatch({ type: constants.TOGGLE_DRAWER });
@@ -13,14 +16,17 @@ const menuList = [
 
 export const login = async ({ email, password }) => {
   try {
-    await new Promise((resolve) => {
-      setTimeout(resolve, 5000);
+    const { token } = await request('/admin/auth/login', {
+      method: 'POST',
+      body: { email, password },
     });
-    const token = 'ToKeN';
     localStorage.setItem('token', token);
     dispatch({ type: constants.LOGIN_SUCCESS, token, menuList });
   } catch (error) {
-    // dispatch({ type: constants.LOGIN_ERROR, error });
+    const jsonMessage = JSON.parse(error.message);
+    if (jsonMessage && jsonMessage.message) {
+      return { [FORM_ERROR]: jsonMessage.message };
+    }
   }
 };
 
@@ -31,9 +37,7 @@ export const authTouch = async () => {
     return;
   }
   try {
-    await new Promise((resolve) => {
-      setTimeout(resolve, 1000);
-    });
+    await request('/admin/auth/touch', { method: 'GET' });
     dispatch({
       type: constants.AUTH_TOUCH_SUCCESS, user: {}, token, menuList,
     });

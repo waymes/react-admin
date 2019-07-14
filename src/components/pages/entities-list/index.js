@@ -31,6 +31,14 @@ class EntitiesList extends Component {
     fetchEntityList();
   }
 
+  componentDidUpdate(prevProps) {
+    const { match } = this.props;
+
+    if (match.url !== prevProps.match.url) {
+      fetchEntityList();
+    }
+  }
+
   getLinkToEntity(entityId) {
     const { match } = this.props;
 
@@ -82,6 +90,7 @@ EntitiesList.propTypes = {
     params: PropTypes.shape({
       entities: PropTypes.string,
     }),
+    url: PropTypes.string,
   }).isRequired,
 };
 
