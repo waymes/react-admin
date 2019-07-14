@@ -1,9 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { makeStyles } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
 import List from '@material-ui/core/List';
-import Divider from '@material-ui/core/Divider';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -18,7 +19,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Sidebar = () => {
+const Sidebar = ({ menuList }) => {
   const classes = useStyles();
   const isDrawerOpen = useSelector(state => state.app.isDrawerOpen);
 
@@ -31,25 +32,20 @@ const Sidebar = () => {
         onKeyDown={toggleDrawer}
       >
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem button key={text}>
+          {menuList.map((menuItem, index) => (
+            <ListItem button key={menuItem.href} component={Link} to={menuItem.href}>
               <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
-        <Divider />
-        <List>
-          {['All mail', 'Trash', 'Spam'].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={text} />
+              <ListItemText primary={menuItem.label} />
             </ListItem>
           ))}
         </List>
       </div>
     </Drawer>
   );
+};
+
+Sidebar.propTypes = {
+  menuList: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };
 
 export default Sidebar;

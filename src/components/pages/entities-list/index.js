@@ -1,6 +1,9 @@
-import React from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { compose } from 'redux';
 import { Link } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -11,7 +14,9 @@ import Paper from '@material-ui/core/Paper';
 import { Button } from '../../commons';
 import authGuard from '../../layouts/auth-guard';
 
-const useStyles = makeStyles(theme => ({
+import { fetchEntityList } from '../../../store/actions/entityList';
+
+const styles = theme => ({
   root: {
     margin: theme.spacing(3, 2),
     overflowX: 'auto',
@@ -19,55 +24,71 @@ const useStyles = makeStyles(theme => ({
   table: {
     minWidth: 650,
   },
-}));
-
-const createData = (name, calories, fat, carbs, protein) => ({
-  name, calories, fat, carbs, protein,
 });
 
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
+class EntitiesList extends Component {
+  componentDidMount() {
+    fetchEntityList();
+  }
 
-const EntitiesList = () => {
-  const classes = useStyles();
+  getLinkToEntity(entityId) {
+    const { match } = this.props;
 
-  return (
-    <Paper className={classes.root}>
-      <Table className={classes.table}>
-        <TableHead>
-          <TableRow>
-            <TableCell>Dessert (100g serving)</TableCell>
-            <TableCell align="right">Calories</TableCell>
-            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-            <TableCell align="right">Protein&nbsp;(g)</TableCell>
-            <TableCell align="right">Actions</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map(row => (
-            <TableRow key={row.name} hover>
-              <TableCell component="th" scope="row">
-                {row.name}
-              </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-              <TableCell align="right">{row.fat}</TableCell>
-              <TableCell align="right">{row.carbs}</TableCell>
-              <TableCell align="right">{row.protein}</TableCell>
-              <TableCell align="right">
-                <Button component={Link} to="/users/1">Edit</Button>
-              </TableCell>
+    return `/${match.params.entities}/${entityId}`;
+  }
+
+  render() {
+    const {
+      list, allowedFields, isLoading, classes,
+    } = this.props;
+
+    if (isLoading) return 'Loading...';
+
+    return (
+      <Paper className={classes.root}>
+        <Table className={classes.table}>
+          <TableHead>
+            <TableRow>
+              {Object.values(allowedFields).map(label => (
+                <TableCell>{label}</TableCell>
+              ))}
+              <TableCell align="right">Actions</TableCell>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </Paper>
-  );
+          </TableHead>
+          <TableBody>
+            {list.map(entity => (
+              <TableRow key={entity.id} hover>
+                {Object.keys(allowedFields).map(key => (
+                  <TableCell key={entity[key]}>{entity[key]}</TableCell>
+                ))}
+                <TableCell align="right">
+                  <Button component={Link} to={this.getLinkToEntity(entity.id)}>Edit</Button>
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Paper>
+    );
+  }
+}
+
+EntitiesList.propTypes = {
+  list: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  allowedFields: PropTypes.shape({}).isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  classes: PropTypes.shape({}).isRequired,
+  match: PropTypes.shape({}).isRequired,
 };
 
-export default authGuard(EntitiesList);
+const mapStateToProps = state => ({
+  list: state.entityList.list,
+  allowedFields: state.entityList.allowedFields,
+  isLoading: state.entityList.isLoading,
+});
+
+export default compose(
+  authGuard,
+  withStyles(styles),
+  connect(mapStateToProps),
+)(EntitiesList);

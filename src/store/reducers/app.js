@@ -5,6 +5,7 @@ const initialState = {
   isLoginLoading: false,
   isDrawerOpen: false,
   isAuthTouchComplete: false,
+  menuList: [],
 };
 
 export default (state = initialState, action) => {
@@ -14,13 +15,24 @@ export default (state = initialState, action) => {
     case constants.LOGIN:
       return { ...state, isLoginLoading: true };
     case constants.LOGIN_SUCCESS:
-      return { ...state, isLoginLoading: false, token: action.token };
+      return {
+        ...state,
+        isLoginLoading: false,
+        token: action.token,
+        menuList: action.menuList,
+      };
     case constants.LOGIN_ERROR:
       return { ...state, isLoginLoading: false };
     case constants.LOGOUT:
       return { ...state, token: null };
     case constants.AUTH_TOUCH_SUCCESS:
-      return { ...state, isAuthTouchComplete: true, user: action.user, token: action.token };
+      return {
+        ...state,
+        isAuthTouchComplete: true,
+        user: action.user,
+        token: action.token,
+        menuList: action.menuList,
+      };
     case constants.AUTH_TOUCH_ERROR:
       return { ...state, isAuthTouchComplete: true };
     default:

@@ -5,6 +5,12 @@ export const toggleDrawer = () => {
   dispatch({ type: constants.TOGGLE_DRAWER });
 };
 
+const menuList = [
+  { label: 'Dashboard', href: '/' },
+  { label: 'Users', href: '/users' },
+  { label: 'Trips', href: '/trips' },
+];
+
 export const login = async ({ email, password }) => {
   dispatch({ type: constants.LOGIN });
   try {
@@ -13,7 +19,7 @@ export const login = async ({ email, password }) => {
     });
     const token = 'ToKeN';
     localStorage.setItem('token', token);
-    dispatch({ type: constants.LOGIN_SUCCESS, token });
+    dispatch({ type: constants.LOGIN_SUCCESS, token, menuList });
   } catch (error) {
     dispatch({ type: constants.LOGIN_ERROR, error });
   }
@@ -29,7 +35,9 @@ export const authTouch = async () => {
     await new Promise((resolve) => {
       setTimeout(resolve, 1000);
     });
-    dispatch({ type: constants.AUTH_TOUCH_SUCCESS, user: {}, token });
+    dispatch({
+      type: constants.AUTH_TOUCH_SUCCESS, user: {}, token, menuList,
+    });
   } catch (error) {
     localStorage.removeItem('token');
     dispatch({ type: constants.AUTH_TOUCH_ERROR });

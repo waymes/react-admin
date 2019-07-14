@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 
 const AuthGuard = Component => connect(state => ({
   isLoggedIn: !!state.app.token,
-}))(({ isLoggedIn }) => {
+}))(({ isLoggedIn, ...props }) => {
   if (isLoggedIn) return <Redirect to="/" />;
 
-  return <Component />;
+  return <Component {...props} />;
 });
 
 export default AuthGuard;
