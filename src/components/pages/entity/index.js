@@ -1,13 +1,20 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Form } from 'react-final-form';
-import { makeStyles } from '@material-ui/core/styles';
+import { withStyles } from '@material-ui/core/styles';
+import { compose } from 'redux';
+import { connect } from 'react-redux';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
+import indigo from '@material-ui/core/colors/indigo';
+import ArrowLeft from '@material-ui/icons/ArrowBack';
 
-import { TextField, Button } from '../../commons';
+import { Button, Loading } from '../../commons';
 import authGuard from '../../layouts/auth-guard';
+import { fetchEntity, saveEntity } from '../../../store/actions/entity';
+import { fieldOptions } from './constants';
 
-const useStyles = makeStyles(theme => ({
+const styles = theme => ({
   root: {
     padding: theme.spacing(3, 2),
     margin: theme.spacing(3, 2),
@@ -18,30 +25,103 @@ const useStyles = makeStyles(theme => ({
     marginLeft: 'auto',
     marginTop: theme.spacing(3),
   },
-}));
+  group: {
+    paddingLeft: theme.spacing(2),
+    paddingRight: theme.spacing(2),
+    background: indigo[50],
+    marginBottom: theme.spacing(2),
+  },
+  goBackButton: {
+    margin: theme.spacing(3, 3, 0, 3),
+    padding: theme.spacing(1, 2, 1, 1),
+  },
+  goBackIcon: {
+    marginRight: theme.spacing(1),
+  },
+});
 
-const Entity = () => {
-  const classes = useStyles();
+class Entity extends React.Component {
+  componentDidMount() {
+    fetchEntity();
+  }
 
-  return (
-    <Paper className={classes.root}>
-      <Form
-        onSubmit={() => {}}
-        render={({ handleSubmit }) => (
-          <form onSubmit={handleSubmit}>
-            <Typography variant="h5" component="h3">
-              Edit User 1
-            </Typography>
-            <TextField name="firstName" label="First Name" />
-            <TextField name="lastName" label="Last Name" />
-            <TextField name="email" label="Email" type="email" />
-            <TextField name="phone" label="Phone" />
-            <Button color="primary" className={classes.submit} type="submit">Save</Button>
-          </form>
-        )}
-      />
-    </Paper>
-  );
+  renderField = (field, id) => {
+    const { classes } = this.props;
+    if (field.isGroup) {
+      return (
+        <div className={classes.group} key={id}>
+          {field.items.map(this.renderField)}
+        </div>
+      );
+    }
+
+    const Field = fieldOptions[field.type] || fieldOptions.text;
+    return (
+      <Field name={field.name} label={field.label} key={field.name} />
+    );
+  }
+
+  render() {
+    const {
+      classes, isLoading, entityData, title, entityFieldList, history,
+    } = this.props;
+
+    if (isLoading) return <Loading />;
+
+    return (
+      <>
+        <Button onClick={history.goBack} className={classes.goBackButton}>
+          <ArrowLeft className={classes.goBackIcon} />
+          Go back
+        </Button>
+        <Paper className={classes.root}>
+          <Form
+            onSubmit={saveEntity}
+            initialValues={entityData}
+            subscription={{}}
+            render={({ handleSubmit }) => (
+              <form onSubmit={handleSubmit}>
+                <Typography variant="h5" component="h3">
+                  {title}
+                </Typography>
+                {entityFieldList.map(this.renderField)}
+                <Button color="primary" className={classes.submit} type="submit">
+                  Save
+                </Button>
+              </form>
+            )}
+          />
+        </Paper>
+      </>
+    );
+  }
+}
+
+Entity.propTypes = {
+  classes: PropTypes.shape().isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  entityData: PropTypes.shape(),
+  entityFieldList: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  title: PropTypes.string,
+  history: PropTypes.shape({
+    goBack: PropTypes.func,
+  }).isRequired,
 };
 
-export default authGuard(Entity);
+Entity.defaultProps = {
+  entityData: null,
+  title: '',
+};
+
+const mapStateToProps = state => ({
+  isLoading: state.entity.isLoading,
+  entityData: state.entity.entityData,
+  entityFieldList: state.entity.entityFieldList,
+  title: state.entity.title,
+});
+
+export default compose(
+  authGuard,
+  withStyles(styles),
+  connect(mapStateToProps),
+)(Entity);

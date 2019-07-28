@@ -7,13 +7,8 @@ export const fetchEntityList = async () => {
   const { pathname } = getCurrentState().router.location;
   dispatch({ type: constants.FETCH_ENTITY_LIST });
   try {
-    const list = await request(`/admin${pathname}`, { method: 'GET' });
-    const allowedFields = {
-      name: 'Name',
-      destination: 'Destination',
-      dateFrom: 'Date from',
-    };
-    dispatch({ type: constants.FETCH_ENTITY_LIST_SUCCESS, list, allowedFields });
+    const response = await request(`/admin${pathname}`, { method: 'GET' });
+    dispatch({ type: constants.FETCH_ENTITY_LIST_SUCCESS, ...response });
   } catch (error) {
     dispatch({ type: constants.FETCH_ENTITY_LIST_ERROR, error });
   }

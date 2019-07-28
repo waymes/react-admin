@@ -8,15 +8,9 @@ export const toggleDrawer = () => {
   dispatch({ type: constants.TOGGLE_DRAWER });
 };
 
-const menuList = [
-  { label: 'Dashboard', href: '/' },
-  { label: 'Subscribers', href: '/subscribers' },
-  { label: 'Trips', href: '/trips' },
-];
-
 export const login = async ({ email, password }) => {
   try {
-    const { token } = await request('/admin/auth/login', {
+    const { token, menuList } = await request('/admin/auth/login', {
       method: 'POST',
       body: { email, password },
     });
@@ -37,9 +31,9 @@ export const authTouch = async () => {
     return;
   }
   try {
-    await request('/admin/auth/touch', { method: 'GET' });
+    const { menuList, user } = await request('/admin/auth/touch', { method: 'GET' });
     dispatch({
-      type: constants.AUTH_TOUCH_SUCCESS, user: {}, token, menuList,
+      type: constants.AUTH_TOUCH_SUCCESS, user, token, menuList,
     });
   } catch (error) {
     localStorage.removeItem('token');

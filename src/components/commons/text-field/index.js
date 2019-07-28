@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Field } from 'react-final-form';
 import { makeStyles } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
+import MaterialTextField from '@material-ui/core/TextField';
 
 const useStyles = makeStyles(() => ({
   textField: {
@@ -10,14 +10,14 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-const InputField = ({ name, label, ...rest }) => {
+const TextField = ({ name, label, ...rest }) => {
   const classes = useStyles();
 
   return (
     <Field
       name={name}
       render={({ input }) => (
-        <TextField
+        <MaterialTextField
           label={label}
           className={classes.textField}
           margin="normal"
@@ -29,13 +29,13 @@ const InputField = ({ name, label, ...rest }) => {
   );
 };
 
-InputField.propTypes = {
+TextField.propTypes = {
   name: PropTypes.string.isRequired,
   label: PropTypes.string,
 };
 
-InputField.defaultProps = {
+TextField.defaultProps = {
   label: '',
 };
 
-export default InputField;
+export default TextField;

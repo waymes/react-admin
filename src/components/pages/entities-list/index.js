@@ -47,33 +47,37 @@ class EntitiesList extends Component {
 
   render() {
     const {
-      list, allowedFields, isLoading, classes,
+      entityList, fieldList, isLoading, classes, goToEntityPageLabel,
     } = this.props;
 
     if (isLoading) return <Loading />;
 
-    if (list.length === 0) return 'Empty for now';
+    if (entityList.length === 0) return 'Empty for now';
 
     return (
       <Paper className={classes.root}>
         <Table className={classes.table}>
           <TableHead>
             <TableRow>
-              {Object.values(allowedFields).map(label => (
-                <TableCell key={label}>{label}</TableCell>
+              {fieldList.map(field => (
+                <TableCell key={field.name}>{field.label}</TableCell>
               ))}
-              <TableCell align="right">Actions</TableCell>
+              {goToEntityPageLabel && <TableCell align="right">Actions</TableCell>}
             </TableRow>
           </TableHead>
           <TableBody>
-            {list.map(entity => (
+            {entityList.map(entity => (
               <TableRow key={entity.id} hover>
-                {Object.keys(allowedFields).map(key => (
-                  <TableCell key={entity[key]}>{entity[key]}</TableCell>
+                {fieldList.map(field => (
+                  <TableCell key={field.name}>{entity[field.name]}</TableCell>
                 ))}
-                <TableCell align="right">
-                  <Button component={Link} to={this.getLinkToEntity(entity.id)}>Edit</Button>
-                </TableCell>
+                {goToEntityPageLabel && (
+                  <TableCell align="right">
+                    <Button component={Link} to={this.getLinkToEntity(entity.id)}>
+                      {goToEntityPageLabel}
+                    </Button>
+                  </TableCell>
+                )}
               </TableRow>
             ))}
           </TableBody>
@@ -84,8 +88,12 @@ class EntitiesList extends Component {
 }
 
 EntitiesList.propTypes = {
-  list: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  allowedFields: PropTypes.shape({}).isRequired,
+  entityList: PropTypes.arrayOf(PropTypes.shape()).isRequired,
+  fieldList: PropTypes.arrayOf(PropTypes.shape({
+    name: PropTypes.string,
+    label: PropTypes.label,
+  })).isRequired,
+  goToEntityPageLabel: PropTypes.string.isRequired,
   isLoading: PropTypes.bool.isRequired,
   classes: PropTypes.shape().isRequired,
   match: PropTypes.shape({
@@ -97,9 +105,10 @@ EntitiesList.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  list: state.entityList.list,
-  allowedFields: state.entityList.allowedFields,
+  entityList: state.entityList.entityList,
+  fieldList: state.entityList.fieldList,
   isLoading: state.entityList.isLoading,
+  goToEntityPageLabel: state.entityList.goToEntityPageLabel,
 });
 
 export default compose(

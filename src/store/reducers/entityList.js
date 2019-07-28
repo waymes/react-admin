@@ -1,8 +1,9 @@
 import * as constants from '../constants/entityList';
 
 const initialState = {
-  list: [],
-  allowedFields: {},
+  entityList: [],
+  fieldList: [],
+  goToEntityPageLabel: '',
   isLoading: false,
 };
 
@@ -13,8 +14,9 @@ export default (state = initialState, action) => {
     case constants.FETCH_ENTITY_LIST_SUCCESS:
       return {
         ...state,
-        list: action.list,
-        allowedFields: action.allowedFields,
+        entityList: action.entityList,
+        fieldList: action.fieldList,
+        goToEntityPageLabel: action.goToEntityPageLabel || '',
         isLoading: false,
       };
     default:
