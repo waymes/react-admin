@@ -21,3 +21,11 @@ export const saveEntity = async (entityData) => {
     console.log(error);
   }
 };
+
+export const createEntity = async (entityData, entitiesName) => {
+  try {
+    await request(`/admin/${entitiesName}`, { method: 'POST', body: entityData });
+  } catch (error) {
+    console.log(error);
+  }
+};

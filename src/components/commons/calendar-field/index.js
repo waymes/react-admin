@@ -24,6 +24,8 @@ const CalendarField = ({ name, label, ...rest }) => {
             margin="normal"
             label={label}
             KeyboardButtonProps={{ 'aria-label': 'change date' }}
+            views={['year', 'month', 'date']}
+            format="DD MMMM YYYY"
             {...input}
             {...rest}
           />

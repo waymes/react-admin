@@ -11,13 +11,13 @@ import ArrowLeft from '@material-ui/icons/ArrowBack';
 
 import { Button, Loading } from '../../commons';
 import authGuard from '../../layouts/auth-guard';
-import { fetchEntity, saveEntity } from '../../../store/actions/entity';
+import { fetchEntity, saveEntity, createEntity } from '../../../store/actions/entity';
 import { fieldOptions } from './constants';
 
 const styles = theme => ({
   root: {
-    padding: theme.spacing(3, 2),
-    margin: theme.spacing(3, 2),
+    padding: theme.spacing(3, 2, 2),
+    margin: theme.spacing(2, 2, 3),
     boxSizing: 'border-box',
   },
   submit: {
@@ -30,13 +30,17 @@ const styles = theme => ({
     paddingRight: theme.spacing(2),
     background: indigo[50],
     marginBottom: theme.spacing(2),
+    overflow: 'auto',
   },
   goBackButton: {
-    margin: theme.spacing(3, 3, 0, 3),
+    margin: theme.spacing(2, 2, 0, 2),
     padding: theme.spacing(1, 2, 1, 1),
   },
   goBackIcon: {
     marginRight: theme.spacing(1),
+  },
+  groupLabel: {
+    marginTop: theme.spacing(2),
   },
 });
 
@@ -45,11 +49,26 @@ class Entity extends React.Component {
     fetchEntity();
   }
 
+  handleSubmit = (values) => {
+    const { match } = this.props;
+
+    console.log(match)
+    if (match.params.id === 'new') {
+      return createEntity(values, match.params.entities);
+    }
+    return saveEntity(values);
+  }
+
   renderField = (field, id) => {
     const { classes } = this.props;
     if (field.isGroup) {
       return (
         <div className={classes.group} key={id}>
+          {field.groupLabel && (
+            <Typography variant="h5" component="h3" className={classes.groupLabel}>
+              {field.groupLabel}
+            </Typography>
+          )}
           {field.items.map(this.renderField)}
         </div>
       );
@@ -106,6 +125,7 @@ Entity.propTypes = {
   history: PropTypes.shape({
     goBack: PropTypes.func,
   }).isRequired,
+  match: PropTypes.shape().isRequired,
 };
 
 Entity.defaultProps = {

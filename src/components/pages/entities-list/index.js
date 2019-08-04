@@ -4,25 +4,29 @@ import { connect } from 'react-redux';
 import { compose } from 'redux';
 import { Link } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
 
 import { Button, Loading } from '../../commons';
+import Table from './table';
 import authGuard from '../../layouts/auth-guard';
 
 import { fetchEntityList } from '../../../store/actions/entityList';
 
 const styles = theme => ({
   root: {
-    margin: theme.spacing(3, 2),
+    margin: theme.spacing(2, 2, 3),
     overflowX: 'auto',
   },
-  table: {
-    minWidth: 650,
+  empty: {
+    margin: theme.spacing(2, 2),
+    textAlign: 'center',
+  },
+  createNew: {
+    display: 'block',
+    width: 'max-content',
+    margin: theme.spacing(2, 2, 0, 2),
+    marginLeft: 'auto',
   },
 });
 
@@ -39,7 +43,7 @@ class EntitiesList extends Component {
     }
   }
 
-  getLinkToEntity(entityId) {
+  getLinkToEntity = (entityId) => {
     const { match } = this.props;
 
     return `/${match.params.entities}/${entityId}`;
@@ -47,42 +51,35 @@ class EntitiesList extends Component {
 
   render() {
     const {
-      entityList, fieldList, isLoading, classes, goToEntityPageLabel,
+      entityList, fieldList, isLoading, classes, goToEntityPageLabel, createNew, match,
     } = this.props;
 
     if (isLoading) return <Loading />;
 
-    if (entityList.length === 0) return 'Empty for now';
-
+    const newEntityLink = `/${match.params.entities}/new`;
     return (
-      <Paper className={classes.root}>
-        <Table className={classes.table}>
-          <TableHead>
-            <TableRow>
-              {fieldList.map(field => (
-                <TableCell key={field.name}>{field.label}</TableCell>
-              ))}
-              {goToEntityPageLabel && <TableCell align="right">Actions</TableCell>}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {entityList.map(entity => (
-              <TableRow key={entity.id} hover>
-                {fieldList.map(field => (
-                  <TableCell key={field.name}>{entity[field.name]}</TableCell>
-                ))}
-                {goToEntityPageLabel && (
-                  <TableCell align="right">
-                    <Button component={Link} to={this.getLinkToEntity(entity.id)}>
-                      {goToEntityPageLabel}
-                    </Button>
-                  </TableCell>
-                )}
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </Paper>
+      <>
+        {createNew && (
+          <Button component={Link} to={newEntityLink} className={classes.createNew}>New</Button>
+        )}
+        <Paper className={classes.root}>
+          {entityList.length === 0
+            ? (
+              <Typography variant="subtitle1" className={classes.empty}>
+                Empty for now
+              </Typography>
+            )
+            : (
+              <Table
+                entityList={entityList}
+                fieldList={fieldList}
+                goToEntityPageLabel={goToEntityPageLabel}
+                getLinkToEntity={this.getLinkToEntity}
+              />
+            )
+          }
+        </Paper>
+      </>
     );
   }
 }
@@ -102,6 +99,7 @@ EntitiesList.propTypes = {
     }),
     url: PropTypes.string,
   }).isRequired,
+  createNew: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -109,6 +107,7 @@ const mapStateToProps = state => ({
   fieldList: state.entityList.fieldList,
   isLoading: state.entityList.isLoading,
   goToEntityPageLabel: state.entityList.goToEntityPageLabel,
+  createNew: state.entityList.createNew,
 });
 
 export default compose(

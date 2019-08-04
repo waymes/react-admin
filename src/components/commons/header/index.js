@@ -16,12 +16,15 @@ const useStyles = makeStyles(theme => ({
   title: {
     marginRight: 'auto',
   },
+  welcomeTitle: {
+    marginRight: theme.spacing(2),
+  },
   menuButton: {
     marginRight: theme.spacing(2),
   },
 }));
 
-const Header = ({ isLoggedIn }) => {
+const Header = ({ isLoggedIn, user }) => {
   const classes = useStyles();
 
   return (
@@ -35,6 +38,11 @@ const Header = ({ isLoggedIn }) => {
         <Typography variant="h6" className={classes.title}>
           <Link to="/">TripAdventure</Link>
         </Typography>
+        {isLoggedIn && user && (
+          <Typography variant="subtitle2" className={classes.welcomeTitle}>
+            {`Welcome, ${user.firstName} ${user.lastName}`}
+          </Typography>
+        )}
         {isLoggedIn
           ? (
             <Button color="inherit" variant="text" onClick={logout}>
@@ -54,6 +62,10 @@ const Header = ({ isLoggedIn }) => {
 
 Header.propTypes = {
   isLoggedIn: PropTypes.bool.isRequired,
+  user: PropTypes.shape({
+    firstName: PropTypes.string,
+    lastName: PropTypes.string,
+  }).isRequired,
 };
 
 export default Header;

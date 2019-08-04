@@ -13,13 +13,13 @@ class GeneralLayout extends React.Component {
 
   render() {
     const {
-      isLoggedIn, children, isAuthTouchComplete, menuList,
+      isLoggedIn, children, isAuthTouchComplete, menuList, user,
     } = this.props;
 
     if (!isAuthTouchComplete) return <Loading fixed />;
     return (
       <div>
-        <Header isLoggedIn={isLoggedIn} />
+        <Header isLoggedIn={isLoggedIn} user={user} />
         <Drawer menuList={menuList} />
         <div>
           {children}
@@ -34,12 +34,14 @@ GeneralLayout.propTypes = {
   isLoggedIn: PropTypes.bool.isRequired,
   isAuthTouchComplete: PropTypes.bool.isRequired,
   menuList: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  user: PropTypes.shape().isRequired,
 };
 
 const mapStateToProps = state => ({
   isLoggedIn: !!state.app.token,
   isAuthTouchComplete: state.app.isAuthTouchComplete,
   menuList: state.app.menuList,
+  user: state.app.user,
 });
 
 export default connect(mapStateToProps)(GeneralLayout);

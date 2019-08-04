@@ -5,6 +5,7 @@ const initialState = {
   isDrawerOpen: false,
   isAuthTouchComplete: false,
   menuList: [],
+  user: null,
 };
 
 export default (state = initialState, action) => {

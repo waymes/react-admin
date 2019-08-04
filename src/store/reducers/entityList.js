@@ -4,6 +4,7 @@ const initialState = {
   entityList: [],
   fieldList: [],
   goToEntityPageLabel: '',
+  createNew: false,
   isLoading: false,
 };
 
@@ -17,6 +18,7 @@ export default (state = initialState, action) => {
         entityList: action.entityList,
         fieldList: action.fieldList,
         goToEntityPageLabel: action.goToEntityPageLabel || '',
+        createNew: action.createNew || false,
         isLoading: false,
       };
     default:
